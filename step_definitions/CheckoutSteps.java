@@ -10,18 +10,28 @@ import implementation.Checkout;
 public class CheckoutSteps {
 
     int bananaPrice = 0;
+    int applePrice = 0;
 
     @Given("^the price of a \"(.*?)\" is (\\d+)c$")
-    public void thePriceOfAIsC(String name, int price) throws Throwable {
-        bananaPrice = price;
+    public void thePriceOfAIsC(String itemName, int price) throws Throwable {
+        if (itemName.equals("banana")) {
+            bananaPrice = price;
+        }
+        else {  
+            applePrice = price;
+        }
     }
 
-    Checkout checkout;
+    Checkout checkout = new Checkout();
 
     @When("^I checkout (\\d+) \"(.*?)\"$")
     public void iCheckout(int itemCount, String itemName) throws Throwable {
-        checkout = new Checkout();
-        checkout.add(itemCount, bananaPrice);
+        if (itemName.equals("banana")) {
+            checkout.add(itemCount, bananaPrice);
+        }
+        else {
+            checkout.add(itemCount, applePrice);
+        }
     }
 
     @Then("^the total price should be (\\d+)c$")
